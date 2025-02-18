@@ -1,0 +1,14 @@
+# Create .gitignore file
+echo "# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.env
+.vscode/
+.idea/
+*.pth
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep" > .gitignore
