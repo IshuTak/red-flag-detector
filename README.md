@@ -92,13 +92,58 @@ http://localhost:5000
 "Let's talk about this when you're ready"
 ```
 **💯 Results**
+
 **1. Home Page**
+
 ![Home_page](https://github.com/user-attachments/assets/96888206-1bb3-42fb-80f3-aed363041cc8)
+
 **2. Single Analysis**
+
 ![Single_analysis](https://github.com/user-attachments/assets/3748ca05-4b3f-4d21-b4d2-bf33ec5ab3f1)
+
 **3. Conversation Analysis**
+
 ![Coversation_analysis](https://github.com/user-attachments/assets/0dad17f6-1a52-437f-8f38-a0f1bf0f2baf)
 
+**4. Full Report (.txt file)**
+```
+Conversation Analysis
+Total Messages
+4
+Red Flags
+2
+Green Flags
+2
+Overall Severity
+High
+Message Analysis:
+Message 1
+⛔ Critical
+Text: You must do exactly what I say
+🚩 Red Flag Confidence: 95.0%
+Concerning Patterns:
+Control Tactics: must do exactly what i say, do exactly what i say, you must do exactly what i say
+Message 2
+ℹ️ Low
+Text: I respect your decision and support your choice
+✅ Green Flag Confidence: 85.0%
+Positive Patterns:
+Respect: respect your, your choice, your decision
+Support: support you
+Message 3
+⛔ Critical
+Text: Nobody will ever love you like I do
+🚩 Red Flag Confidence: 95.0%
+Concerning Patterns:
+Manipulation: nobody will ever love you, love you like i do
+Message 4
+ℹ️ Low
+Text: Let's talk about this when you're ready
+✅ Green Flag Confidence: 85.0%
+Positive Patterns:
+Healthy Boundaries: when you're ready
+
+```
 **🚀 Project Structure**
 ```
 red_flag_detector/
