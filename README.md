@@ -92,8 +92,11 @@ http://localhost:5000
 "Let's talk about this when you're ready"
 ```
 **💯 Results**
+**1. Home Page**
 ![Home_page](https://github.com/user-attachments/assets/96888206-1bb3-42fb-80f3-aed363041cc8)
+**2. Single Analysis**
 ![Single_analysis](https://github.com/user-attachments/assets/3748ca05-4b3f-4d21-b4d2-bf33ec5ab3f1)
+**3. Conversation Analysis**
 ![Coversation_analysis](https://github.com/user-attachments/assets/0dad17f6-1a52-437f-8f38-a0f1bf0f2baf)
 
 **🚀 Project Structure**
