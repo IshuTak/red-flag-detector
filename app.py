@@ -1,4 +1,3 @@
-# app.py
 
 from flask import Flask, render_template, request, jsonify
 from pathlib import Path
@@ -7,13 +6,13 @@ import logging
 from datetime import datetime
 import traceback
 
-# Add project root to path
+
 project_root = Path(__file__).parent
 sys.path.append(str(project_root))
 
 from src.models.flag_detector import FlagDetector
 
-# Setup logging
+# logging
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
@@ -23,7 +22,7 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-# Initialize model
+# Initialize 
 model = None
 
 def init_model():
@@ -61,19 +60,19 @@ def analyze_message():
         if not message:
             return jsonify({'error': 'No message provided'}), 400
         
-        # Initialize model if needed
+        
         if not model:
             if not init_model():
                 return jsonify({'error': 'Model initialization failed'}), 500
         
-        # Get prediction
+        
         result = model.predict(message)
         
-        # Log analysis result
+        
         logger.info(f"Message analyzed - Prediction: {result['prediction']}, "
                    f"Severity: {result.get('severity', 'N/A')}")
         
-        # Enhance response with additional metadata
+        
         response = {
             **result,
             'timestamp': datetime.now().isoformat(),
@@ -96,7 +95,7 @@ def analyze_message():
 def analyze_conversation():
     """Analyze multiple messages"""
     try:
-        # Get and validate input
+        
         data = request.get_json()
         if not data:
             return jsonify({'error': 'No data provided'}), 400
@@ -105,15 +104,15 @@ def analyze_conversation():
         if not messages:
             return jsonify({'error': 'No messages provided'}), 400
         
-        # Initialize model if needed
+        
         if not model:
             if not init_model():
                 return jsonify({'error': 'Model initialization failed'}), 500
         
-        # Get analysis
+        
         result = model.analyze_messages(messages)
         
-        # Log analysis summary
+        
         logger.info(
             f"Conversation analyzed - "
             f"Total messages: {result['overall_assessment']['total_messages']}, "
@@ -121,7 +120,7 @@ def analyze_conversation():
             f"Severity: {result['overall_assessment']['severity']}"
         )
         
-        # Enhance response with additional metadata
+        
         response = {
             **result,
             'timestamp': datetime.now().isoformat(),
@@ -151,7 +150,7 @@ def internal_error(error):
     logger.error(f"Internal server error: {error}")
     return jsonify({'error': 'Internal server error'}), 500
 
-# Health check endpoint
+
 @app.route('/health')
 def health_check():
     """Health check endpoint"""
@@ -162,16 +161,16 @@ def health_check():
     })
 
 if __name__ == '__main__':
-    # Initialize model
+    # Initialize 
     init_model()
     
-    # Configuration for development
+    
     app.config.update(
         DEBUG=True,
         TEMPLATES_AUTO_RELOAD=True
     )
     
-    # Run app
+    
     app.run(
         host='0.0.0.0',
         port=5000,
