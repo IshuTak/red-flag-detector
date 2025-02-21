@@ -1,4 +1,4 @@
-# src/utils/pattern_detector.py
+
 
 import re
 from typing import Dict, Any
@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 class PatternDetector:
     def __init__(self):
-        # Core toxic patterns
+        
         self.toxic_patterns = {
             'threats': [
                 r'\b(regret|threat|warn|revenge)\b',
@@ -240,7 +240,7 @@ class PatternDetector:
             ]
         }
         
-        # Positive patterns
+        
         self.positive_patterns = {
             'support': [
                 'proud of you', 'believe in you',
@@ -350,7 +350,7 @@ class PatternDetector:
             ]
         }
         
-        # Compile regex patterns
+        
         import re
         self.compiled_patterns = {
             'toxic': {
@@ -366,10 +366,10 @@ class PatternDetector:
         }
 
     def analyze_message(self, message: str) -> Dict[str, Any]:
-        """Analyze a single message for patterns"""
+        
         message = message.lower()
         
-        # Check toxic patterns
+        
         toxic_matches = {}
         for category, patterns in self.compiled_patterns['toxic'].items():
             matches = []
@@ -380,7 +380,7 @@ class PatternDetector:
             if matches:
                 toxic_matches[category] = list(set(matches))
         
-        # Check positive patterns
+        
         positive_matches = {}
         for category, patterns in self.compiled_patterns['positive'].items():
             matches = []
@@ -391,7 +391,7 @@ class PatternDetector:
             if matches:
                 positive_matches[category] = list(set(matches))
         
-        # Determine prediction
+        
         has_toxic = bool(toxic_matches)
         has_positive = bool(positive_matches)
         
