@@ -1,4 +1,3 @@
-# scripts/prepare_data.py
 
 import pandas as pd
 import numpy as np
@@ -16,7 +15,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 def prepare_hate_speech_data():
-    """Load and prepare hate speech dataset"""
+    
     try:
         df = pd.read_csv('data/raw/hate_speech.csv')
         logger.info(f"Loaded hate speech dataset with {len(df)} rows")
@@ -26,7 +25,7 @@ def prepare_hate_speech_data():
         return None
 
 def prepare_go_emotions_data():
-    """Load and prepare Go Emotions dataset"""
+    
     try:
         df = pd.read_csv('data/raw/go_emotions.csv')
         logger.info(f"Loaded Go Emotions dataset with {len(df)} rows")
@@ -36,13 +35,13 @@ def prepare_go_emotions_data():
         return None
 
 def main():
-    # Create necessary directories
+    
     Path('data/processed').mkdir(parents=True, exist_ok=True)
     
-    # Initialize data preprocessor
+    
     preprocessor = DataPreprocessor()
     
-    # Load datasets
+    
     hate_speech_df = prepare_hate_speech_data()
     emotions_df = prepare_go_emotions_data()
     
@@ -50,14 +49,14 @@ def main():
         logger.error("Failed to load one or both datasets")
         return
     
-    # Process and merge datasets
+    
     logger.info("Processing and merging datasets...")
     
     try:
-        # Load and combine datasets
+        
         combined_df = preprocessor.combine_datasets(hate_speech_df, emotions_df)
         
-        # Save the combined dataset
+        
         output_path = 'data/processed/processed_combined_dataset.csv'
         combined_df.to_csv(output_path, index=False)
         logger.info(f"Saved processed dataset to {output_path}")
@@ -66,7 +65,7 @@ def main():
         
         
         
-        # Print dataset statistics
+        
         logger.info("\nDataset Statistics:")
         logger.info(f"Total samples: {len(combined_df)}")
         logger.info("\nClass distribution:")
