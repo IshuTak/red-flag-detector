@@ -11,11 +11,11 @@ import matplotlib.pyplot as plt
 import time
 from torch.cuda.amp import autocast, GradScaler
 
-# Add project root to path
+
 project_root = Path(__file__).parent.parent
 sys.path.append(str(project_root))
 
-# Setup logging
+
 logging.basicConfig(
     level=logging.INFO,
     format='%(asctime)s - %(levelname)s - %(message)s',
@@ -26,10 +26,10 @@ logger = logging.getLogger(__name__)
 class FastFlagDetectorModel(nn.Module):
     def __init__(self, num_labels=2):
         super().__init__()
-        # Use DistilRoBERTa instead of RoBERTa
+        
         self.distilroberta = AutoModel.from_pretrained('distilroberta-base')
         
-        # Freeze embeddings and first 4 layers
+        
         modules_to_freeze = [
             self.distilroberta.embeddings,
             *self.distilroberta.encoder.layer[:4]
@@ -38,7 +38,7 @@ class FastFlagDetectorModel(nn.Module):
             for param in module.parameters():
                 param.requires_grad = False
         
-        # Efficient classifier head
+        
         self.classifier = nn.Sequential(
             nn.Linear(768, 256),
             nn.ReLU(),
@@ -60,21 +60,21 @@ class OptimizedTrainer:
         self.device = 'cpu'
         self.max_length = max_length
         
-        # Optimize CPU performance
+        
         torch.set_num_threads(4)
         
-        # Create directories
+        
         self.model_dir = Path('models/bert_model/saved_model')
         self.model_dir.mkdir(parents=True, exist_ok=True)
         
-        # Initialize model
+        
         self.model = FastFlagDetectorModel().to(self.device)
         self.tokenizer = AutoTokenizer.from_pretrained('distilroberta-base')
         
-        # Initialize gradient scaler for mixed precision
+        
         self.scaler = GradScaler()
         
-        # Training metrics
+        
         self.train_losses = []
         self.val_losses = []
         self.val_accuracies = []
@@ -82,14 +82,14 @@ class OptimizedTrainer:
     def load_and_preprocess_data(self, batch_size=32):
         logger.info("Loading and preprocessing data...")
         try:
-            # Load data
+            
             data_dir = Path('data/processed')
             
-            # Load and prepare training data
+            
             train_data = self.load_data_efficiently(data_dir, 'train')
             test_data = self.load_data_efficiently(data_dir, 'test')
             
-            # Create dataloaders with efficient batch size
+            
             train_loader = DataLoader(
                 train_data, 
                 batch_size=batch_size,
@@ -110,7 +110,7 @@ class OptimizedTrainer:
             raise
             
     def load_data_efficiently(self, data_dir, prefix):
-        # Load data with proper typing
+        
         input_ids = torch.from_numpy(
             np.load(f"{data_dir}/{prefix}_input_ids.npy")
         ).long()
@@ -150,18 +150,18 @@ class OptimizedTrainer:
             )
             
             for i, (input_ids, attention_mask, labels) in enumerate(batch_iterator):
-                # Move data to device
+                
                 input_ids = input_ids.to(self.device)
                 attention_mask = attention_mask.to(self.device)
                 labels = labels.to(self.device)
                 
-                # Forward pass with mixed precision
+                
                 with autocast():
                     outputs = self.model(input_ids, attention_mask)
                     loss = criterion(outputs, labels)
                     loss = loss / gradient_accumulation_steps
                 
-                # Backward pass with gradient scaling
+                
                 self.scaler.scale(loss).backward()
                 
                 if (i + 1) % gradient_accumulation_steps == 0:
@@ -171,21 +171,21 @@ class OptimizedTrainer:
                 
                 total_loss += loss.item() * gradient_accumulation_steps
                 
-                # Update progress bar
+                
                 batch_iterator.set_postfix({
                     'loss': f"{loss.item():.4f}",
                     'avg_loss': f"{total_loss/(i+1):.4f}"
                 })
             
-            # Validation phase
+           
             val_loss, val_accuracy = self.evaluate(val_loader, criterion)
             
-            # Save metrics
+            
             self.train_losses.append(total_loss / len(train_loader))
             self.val_losses.append(val_loss)
             self.val_accuracies.append(val_accuracy)
             
-            # Save best model
+            
             if val_accuracy > best_val_accuracy:
                 best_val_accuracy = val_accuracy
                 self.save_model('best_model.pth')
@@ -240,13 +240,13 @@ class OptimizedTrainer:
 
 def main():
     try:
-        # Initialize trainer
+        
         trainer = OptimizedTrainer(max_length=128)
         
-        # Load and preprocess data
+        
         train_loader, val_loader = trainer.load_and_preprocess_data(batch_size=32)
         
-        # Train model
+        
         trainer.train(
             train_loader,
             val_loader,
@@ -255,7 +255,7 @@ def main():
             gradient_accumulation_steps=4
         )
         
-        # Plot metrics
+        
         trainer.plot_metrics()
         
         logger.info("Training completed successfully!")
