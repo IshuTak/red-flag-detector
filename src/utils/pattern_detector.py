@@ -147,7 +147,7 @@ class PatternDetector:
                 "who are you talking to",
                 "show me your phone",
                 "give me your password",
-                r"you must\s+.*",  # Catches "you must do exactly what I say"
+                r"you must\s+.*",  
                 r"must do\s+.*",
                 r"have to do\s+.*",
                 r"need to know where\s+.*",
